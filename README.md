@@ -2,21 +2,20 @@
   This repository contains all the information studied and created during the [Advanced Physical Design Using OpenLANE / SKY130](https://www.vlsisystemdesign.com/advanced-physical-design-using-openlane-sky130/) workshop. It is primarily foucused on a complete RTL2GDS flow using the open-soucre flow named OpenLANE. [PICORV32A](https://github.com/cliffordwolf/picorv32) RISC-V core design is used for the purpose.
 
 # Contents
-  - [Introduction To RTL to GDSII Flow](#introduction-to-rtl-to-gdsii-flow)
-  - [Google SkyWater130 PDK](#about-google-skywater-pdk)
-  - [List of Open-Source Tools Used](#list-of-all-open-source-tools-used)
-  - [Setting Up Environment](#setting-up-environment)
-  - [Day 1 - Introduction to open-source EDA, OpenLANE and SKY130 PDK](#day-1---introduction-to-open-source-eda-openlane-and-sky130-pdk)
-    - [Basic IC Design Terminologies](#basic-ic-design-terminologies)
-    - [Introduction To RISC-V](#introduction-to-risc-v)
-    - [SoC Design and OpenLANE](#soc-design-and-openlane)
-      - [Open-Source PDK Directory Structure](#open-source-pdk-directory-structure)
-      - [What is OpenLANE](#what-is-openlane)
-    - [Open-Source EDA Tools](#open-source-eda-tools)
-      - [OpenLANE Initialization](#openlane-initialization)
-      - [Design Preparation](#design-preparation)
-      - [Design Synthesis and Results](#design-synthesis-and-results)
-  - [Day 2 - Good floorplan vs bad floorplan and introduction to library cells](#day-2---good-floorplan-vs-bad-floorplan-and-introduction-to-library-cells)
+
+- [Day 1 - Introduction to open-source EDA, OpenLANE and SKY130 PDK](#day-1---introduction-to-open-source-eda-openlane-and-sky130-pdk)
+    1. [Basic IC Design Terminologies](#basic-ic-design-terminologies)
+    2. [Introduction To RISC-V](#introduction-to-risc-v)
+    3. [Introduction To RTL to GDSII Flow](#introduction-to-rtl-to-gdsii-flow)
+    4. [List of Open Source Tools Used](#list-of-open-source-tools-used)
+    5. [Google SkyWater130 PDK](#google-skywater130-pdk)
+    6. [What is OpenLANE](#what-is-openlane)
+    7. [Getting Started with OpenLANE](#getting-started-with-openlane)
+        - [PDK Directory Structure](#pdk-directory-structure)
+        - [OpenLANE Initialization](#openlane-initialization)
+        - [Design Preparation](#design-preparation)
+        - [Design Synthesis and Results](#design-synthesis-and-results)
+ - [Day 2 - Good floorplan vs bad floorplan and introduction to library cells](#day-2---good-floorplan-vs-bad-floorplan-and-introduction-to-library-cells)
     - [Chip Floorplanning](#chip-floorplanning)
       - [Utilization Factor and Aspect Ratio](#utilization-factor-and-aspect-ratio)
       - [Power Planning](#power-planning)
@@ -44,25 +43,41 @@
   - [References](#references)
   - [Acknowledgement](#acknowledgement)
  
-# Introduction To RTL to GDSII Flow
+
+ 
+# Day 1 - Introduction to open-source EDA, OpenLANE and Sky130 PDK
+ ## Basic IC Design Terminologies
+  Some frequently used terminologies are mentioned below:
+  - **Package**: It is a case that surrounds the circuit material to protect it from physical damage or corrosion and allow mounting of the electrical contacts connecting it to the printed circuit board (PCB). The below snippet shows an IC with 48 pins and Quad Flat No-Leads(QFN) package.
+  - **Die**: A die is a small block of semiconducting material on which a given functional circuit is fabricated.
+  - **Core**: It is the actual area of the IC where the logic resides.
+  - **Pads**: These are the interfaces between the internal signals of a chip and the external pins
+ 
+  <img src="images/pads_core_die.PNG">
+ 
+ ## Introduction To RISC-V
+   RISC-V is a new ISA that's available under open, free and non-restrictive licences. RISC-V ISA delivers a new level of free, extensible software and hardware freedom on architecture.
+   - It is far simpler and smaller than other commercial ISAs available.
+   - It avoids micro-architecture or technology dependent features.
+   - It has small standard base ISA and multiple standard extensions.
+   - It supports variable-length instruction encoding.
+   
+
+## Introduction To RTL to GDSII Flow
   RTL to GDSII Flow refers to the all the steps involved in converting a logical Register Transfer Level(RTL) Design to a fabrication ready GDSII format. GDSII is a database file format which is an industry standard for data exchange of IC layout artwork.
   The RTL to GSDII flow consists of following steps:
   - RTL Synthesis
   - Static Timing Analysis(STA)
   - Design for Testability(DFT)
-  - Floorplanning
+  - Floorplanning / Powerplanning
   - Placement
   - Clock Tree Synthesis(CTS)
   - Routing
   - GDSII Streaming
  
- All the steps are further discussed in details in the repository.
   
-# About Google SkyWater PDK
-  Google and SkyWater Technology Foundry in collaboration have released a completely open-source Process Design Kit(PDK) in May, 2020. The current release target to a SKY130 (i.e. 130 nm) process node is available as [SkyWater Open Source PDK](https://github.com/google/skywater-pdk). The PDK provides Physical VLSI Designer with a wide range of flexibility in design choices. All the designs and simulations listed in this repository are carried out using the same SkyWater Open Source PDK.
-
-# List of All Open-Source Tools Used
-  | Name of Tool | Application / Usage |
+## List of Open Source Tools Used
+  | Tool | Application |
   | --- | --- |
   | [Yosys](https://github.com/YosysHQ/yosys) | Synthesis of RTL Design |
   | ABC | Mapping of Netlist |
@@ -73,36 +88,12 @@
   | [NGSPICE](https://github.com/imr/ngspice) | SPICE Extraction and Simulation |
   | SPEF_EXTRACTOR | Generation of SPEF file from DEF file |
   
-# Setting Up Environment
-  The above list of tools shows that, many different tools are required for various tasks in Physical VLSI Design. Each tool in itself have number of system requirements and require various supporting tools to be installed. Installing each tool one-by-one seems in-efficient. This is made easy by some custom scripts that setup the required tools and environment for them in just a few easy steps. To install all the required tools, one can refer to the below mentioned repositories:
-  - [VSDFlow](https://github.com/kunalg123/vsdflow) - Installs Yosys, Magic, OpenTimer, OpenSTA and some other supporting tools
-  - [OpenLANE Build Scripts](https://github.com/nickson-jose/openlane_build_script) - Install all required OpenROAD and some supporting tools
-  
-# Day 1 - Inception of open-source EDA, OpenLANE and Sky130 PDK
- ## Basic IC Design Terminologies
-  During the Physical Designing, one will come across multiple terminologies that are frequently used. Some of them are mentioned below:
-  - Package: It is a case that surrounds the circuit material to protect it from physical damage or corrosion and allow mounting of the electrical contacts connecting it to the printed circuit board (PCB). The below snippet shows an IC with 48 pins and Quad Flat No-Leads(QFN) package.
-  - Die: A die is a small block of semiconducting material on which a given functional circuit is fabricated.
-  - Core: It is the actual area of the IC where the logic resides.
-  - Pads: These are the interfaces between the internal signals of a chip and the external pins
- 
-  <img src="images/d1_ic_terms.JPG">
- 
- ## Introduction To RISC-V
-   RISC-V is a new ISA that's available under open, free and non-restrictive licences. RISC-V ISA delivers a new level of free, extensible software and hardware freedom on architecture.
-   - It is far simpler and smaller than other commercial ISAs available.
-   - It avoids micro-architecture or technology dependent features.
-   - It has small standard base ISA and multiple standard extensions.
-   - It supports variable-length instruction encoding.
-   A brief design for RISC-V core can be refered [here](https://github.com/ShonTaware/RISC-V_Core_4_Stage)
    
- ## SoC Design and OpenLANE
- ### Open-Source PDK Directory Structure
-   All the Process Design Kit(PDK) are listed under the `pdks/` directory. Along with the `Sky130A` we are using some other open-source PDKs and other related files are also available in the directory. The location of the PDK directory is given of `$PDK_ROOT` variable. 
-    
-   <img src="images/d1_pdk_directory_structure.JPG">
+ ## Google SkyWater130 PDK
+  Google and SkyWater Technology Foundry in collaboration have released a completely open-source Process Design Kit(PDK) in May, 2020. The current release target to a SKY130 (i.e. 130 nm) process node is available as [SkyWater Open Source PDK](https://github.com/google/skywater-pdk). The PDK provides Physical VLSI Designer with a wide range of flexibility in design choices. All the designs and simulations listed in this repository are carried out using the same SkyWater Open Source PDK.
   
- ### What is OpenLANE
+  
+ ## What is OpenLANE
    [OpenLANE](https://github.com/efabless/openlane) is an automated RTL to GDSII flow which includes various open-source components such as OpenROAD, Yosys, Magic, Fault, Netgen, SPEF-Extractor. It also facilitates to add custom design exploration and optimization scripts.
    The detailed diagram of the OpenLANE architecture is shown below:
    
@@ -136,11 +127,16 @@
       1. `Magic` - Performs DRC Checks & Antenna Checks
       2. `Netgen` - Performs LVS Checks
       
- ## Open-Source EDA Tools
- ### OpenLANE Initialization
-   For invoking OpenLANE in Linux Ubuntu, we should first run the docker everytime we use OpenLANE. This is done by using the following script:
+ ## Getting Started with OpenLANE
+ ### PDK Directory Structure
+   All the Process Design Kit(PDK) are listed under the `pdks/` directory. Along with the `Sky130A` we are using some other open-source PDKs and other related files are also available in the directory. The location of the PDK directory is given of `$PDK_ROOT` variable. 
     
-    docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc6
+   <img src="images/pdk_directory_structure.PNG">
+ 
+ ### OpenLANE Initialization
+   For invoking OpenLANE in Linux Ubuntu, we navigate to `/Desktop/work/tools/openlane_working_dir/openlane` and  first run the docker everytime we use OpenLANE. This is done by using the following script:
+    
+    docker
    
    A custom shell script or commands can be generated to make the task simpler.
    
@@ -148,7 +144,7 @@
    - OpenLANE supports two modes of operation: interactive and autonomous.
    - To use interactive mode use `-interactive` flag with `./flow.tcl`
    
-   <img src="images/d1_openlane_invoke.JPG"> 
+   <img src="images/openlane_invoke.PNG"> 
    
  ### Design Preparation
    The first step after invoking OpenLANE is to import the openlane package of required version. This is done using following command. Here 0.9 is the required version of OpenLANE.
@@ -159,12 +155,7 @@
        
     prep -design <design-name>
    
-   Some additional flags that can be used while preparation are:
-     <br />`-tag <name-for-current-run>` - All the files generated during the flow will be stored in a directory named `<name-for-current-run>`
-     <br />`-overwrite` - If a directory name mentioned in `-tag` already exists, it will be overwritten.
-   
-   <img src="images/d1_openlane_design_prep.JPG"> 
-   
+    
    During the design preparation the technology LEF and cell LEF files are merged together to obtain a `merged.lef` file. The LEF file contains information like the layer information, set of design rules, information about each standard cell which is required for place and route. 
     
  ### Design Synthesis and Results
