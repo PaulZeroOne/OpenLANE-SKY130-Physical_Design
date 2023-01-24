@@ -53,7 +53,7 @@
   - **Core**: It is the actual area of the IC where the logic resides.
   - **Pads**: These are the interfaces between the internal signals of a chip and the external pins
 <p>
-<img src="/images/pads_core_die.png">
+<img src="/images/1.png">
 </p>
 
  ## Introduction To RISC-V
@@ -98,7 +98,7 @@
    [OpenLANE](https://github.com/efabless/openlane) is an automated RTL to GDSII flow which includes various open-source components such as OpenROAD, Yosys, Magic, Fault, Netgen, SPEF-Extractor. It also facilitates to add custom design exploration and optimization scripts.
    The detailed diagram of the OpenLANE architecture is shown below:
    
-<img src="/images/openlane_flow.png">
+<img src="/images/2.png">
    
    OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively as shown here.
 
@@ -132,7 +132,7 @@
  ### PDK Directory Structure
    All the Process Design Kit(PDK) are listed under the `pdks/` directory. Along with the `Sky130A` we are using some other open-source PDKs and other related files are also available in the directory. The location of the PDK directory is given of `$PDK_ROOT` variable. 
     
-<img src="images/pdk_directory_structure.PNG">
+<img src="images/3.PNG">
  
  ### OpenLANE Initialization
    For invoking OpenLANE in Linux Ubuntu, we navigate to `/Desktop/work/tools/openlane_working_dir/openlane` and  first run the docker everytime we use OpenLANE. This is done by using the following script:
@@ -145,7 +145,7 @@
    - OpenLANE supports two modes of operation: interactive and autonomous.
    - To use interactive mode use `-interactive` flag with `./flow.tcl`
    
-<img src="images/openlane_invoke.PNG"> 
+<img src="images/4.PNG"> 
    
  ### Design Preparation
    The first step after invoking OpenLANE is to import the openlane package of required version. This is done using following command. Here 0.9 is the required version of OpenLANE.
