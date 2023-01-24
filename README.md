@@ -52,9 +52,10 @@
   - **Die**: A die is a small block of semiconducting material on which a given functional circuit is fabricated.
   - **Core**: It is the actual area of the IC where the logic resides.
   - **Pads**: These are the interfaces between the internal signals of a chip and the external pins
- 
-<img src="images/pads_core_die.png">
- 
+<p>
+<img src="/images/pads_core_die.png">
+</p>
+
  ## Introduction To RISC-V
    RISC-V is a new ISA that's available under open, free and non-restrictive licences. RISC-V ISA delivers a new level of free, extensible software and hardware freedom on architecture.
    - It is far simpler and smaller than other commercial ISAs available.
@@ -97,7 +98,7 @@
    [OpenLANE](https://github.com/efabless/openlane) is an automated RTL to GDSII flow which includes various open-source components such as OpenROAD, Yosys, Magic, Fault, Netgen, SPEF-Extractor. It also facilitates to add custom design exploration and optimization scripts.
    The detailed diagram of the OpenLANE architecture is shown below:
    
-   <img src="images/openlane_flow.png">
+<img src="/images/openlane_flow.png">
    
    OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively as shown here.
 
@@ -131,7 +132,7 @@
  ### PDK Directory Structure
    All the Process Design Kit(PDK) are listed under the `pdks/` directory. Along with the `Sky130A` we are using some other open-source PDKs and other related files are also available in the directory. The location of the PDK directory is given of `$PDK_ROOT` variable. 
     
-   <img src="images/pdk_directory_structure.PNG">
+<img src="images/pdk_directory_structure.PNG">
  
  ### OpenLANE Initialization
    For invoking OpenLANE in Linux Ubuntu, we navigate to `/Desktop/work/tools/openlane_working_dir/openlane` and  first run the docker everytime we use OpenLANE. This is done by using the following script:
@@ -144,7 +145,7 @@
    - OpenLANE supports two modes of operation: interactive and autonomous.
    - To use interactive mode use `-interactive` flag with `./flow.tcl`
    
-   <img src="images/openlane_invoke.PNG"> 
+<img src="images/openlane_invoke.PNG"> 
    
  ### Design Preparation
    The first step after invoking OpenLANE is to import the openlane package of required version. This is done using following command. Here 0.9 is the required version of OpenLANE.
@@ -163,7 +164,7 @@
    
     run_synthesis
    
-   <img src="images/d1_openlane_synthesis.JPG">
+<img src="images/openlane_synthesis.JPG">
    
 # Day 2 - Good floorplan vs bad floorplan and introduction to library cells
  ## Chip Floorplanning
