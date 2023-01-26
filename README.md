@@ -52,9 +52,9 @@
   - **Die**: A die is a small block of semiconducting material on which a given functional circuit is fabricated.
   - **Core**: It is the actual area of the IC where the logic resides.
   - **Pads**: These are the interfaces between the internal signals of a chip and the external pins
-<p>
-<img src="/images/1.png">
-</p>
+
+
+![](https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg)
 
  ## Introduction To RISC-V
    RISC-V is a new ISA that's available under open, free and non-restrictive licences. RISC-V ISA delivers a new level of free, extensible software and hardware freedom on architecture.
@@ -98,7 +98,7 @@
    [OpenLANE](https://github.com/efabless/openlane) is an automated RTL to GDSII flow which includes various open-source components such as OpenROAD, Yosys, Magic, Fault, Netgen, SPEF-Extractor. It also facilitates to add custom design exploration and optimization scripts.
    The detailed diagram of the OpenLANE architecture is shown below:
    
-<img src="/images/2.png">
+<img src="/images/2.PNG">
    
    OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively as shown here.
 
@@ -171,7 +171,7 @@
    Chip Floorplanning is the arrangement of logical block, library cells, pins on silicon chip. It makes sure that every module has been assigned an appropriate area and aspect ratio, every pin of the module has connection with other modules or periphery of the chip and modules are arranged in a way such that it consumes lesser area on a chip.
    
  ### Utilization Factor and Aspect Ratio
-   Utilization Factor is ratio of the area of core used by standard cells to the total core area. The utilization factor is generally kept in the range of 0.5-0.7 i.e. 50% - 60%. Maintaining a proper utilization factor facilitates placement and routing optimization.
+   Utilization Factor is ratio of the area of core used by standard cells to the total core area. The utilization factor is generally kept in the range of 0.5-0.7 i.e. 50% - 70%. Maintaining a proper utilization factor facilitates placement and routing optimization.
    
  ### Power Planning
    Power planning is a step in which power grid network is created to distribute power to each part of the design equally. This step deals with the unwanted voltage drop and ground bounce. Steady state IR Drop is caused by the resistance of the metal wires comprising the power distribution network. By reducing the voltage difference between local power and ground, steady-state IR Drop reduces both the speed and noise immunity of the local cells and macros.
