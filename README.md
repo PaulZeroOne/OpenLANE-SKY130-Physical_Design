@@ -301,7 +301,9 @@
   In order to use a design of standard cell layout in OpenLANE RTL2GDS flow, it is converted to a standard cell LEF. LEF stands for Library Exchange Format. The entire design has to be analyzed for any timing violations after addition or change in the design.
   
  ## Magic Layout to Standard Cell LEF
-  Before creating the LEF file we require some details about the layers in the designs. This details are available in a `tracks.info` as shown below. It gives information about the `offset` and `pitch` of a track in a given layer both in horizontal and vertical direction. The track information is given in below mentioned format.
+  Before creating the LEF file we require some details about the layers in the designs. This details are available in a `tracks.info` as shown below. It gives information about the `offset` and `pitch` of a track in a given layer both in horizontal and vertical direction. The track information is given in below mentioned format. Additionally LEF file helps to protect the IP since no cnnectivity information is disclosed.
+
+For each technology, tracks information is provided by the foundary and they are necessary because routes for each layer can only go over their respective tracks.
   
     <layer-name> <X-or-Y> <track-offset> <track-pitch>
     
