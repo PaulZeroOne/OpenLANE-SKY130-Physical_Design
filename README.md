@@ -34,6 +34,7 @@
     - [Transient Analysis using NGSPICE](#transient-analysis-using-ngspice)
   - [Day 4 - Pre-layout timing analysis and importance of good clock tree](#day-4---pre-layout-timing-analysis-and-importance-of-good-clock-tree)
     - [Magic Layout to Standard Cell LEF](#magic-layout-to-standard-cell-lef)
+      - [Importing custom LEF into synthesis flow](#importing-custom-lef-into-synthesis-flow)
     - [Timing Analysis using OpenSTA](#timing-analysis-using-opensta)
     - [Clock Tree Synthesis using TritonCTS](#clock-tree-synthesis-using-tritoncts)
   - [Day 5 - Final steps for RTL2GDS](#day-5---final-steps-for-rtl2gds)
@@ -44,7 +45,6 @@
   - [Acknowledgement](#acknowledgement)
  
 
- 
 # Day 1 - Introduction to open-source EDA, OpenLANE and Sky130 PDK
  ## Basic IC Design Terminologies
   Some frequently used terminologies are mentioned below:
@@ -54,7 +54,7 @@
   - **Pads**: These are the interfaces between the internal signals of a chip and the external pins
 
 
-![](https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg)
+![](/images/d1_1_pdc.PNG)
 
  ## Introduction To RISC-V
    RISC-V is a new ISA that's available under open, free and non-restrictive licences. RISC-V ISA delivers a new level of free, extensible software and hardware freedom on architecture.
@@ -76,7 +76,6 @@
   - Routing
   - GDSII Streaming
  
-  
 ## List of Open Source Tools Used
   | Tool | Application |
   | --- | --- |
@@ -89,16 +88,14 @@
   | [NGSPICE](https://github.com/imr/ngspice) | SPICE Extraction and Simulation |
   | SPEF_EXTRACTOR | Generation of SPEF file from DEF file |
   
-   
  ## Google SkyWater130 PDK
   Google and SkyWater Technology Foundry in collaboration have released a completely open-source Process Design Kit(PDK) in May, 2020. The current release target to a SKY130 (i.e. 130 nm) process node is available as [SkyWater Open Source PDK](https://github.com/google/skywater-pdk). The PDK provides Physical VLSI Designer with a wide range of flexibility in design choices. All the designs and simulations listed in this repository are carried out using the same SkyWater Open Source PDK.
-  
   
  ## What is OpenLANE
    [OpenLANE](https://github.com/efabless/openlane) is an automated RTL to GDSII flow which includes various open-source components such as OpenROAD, Yosys, Magic, Fault, Netgen, SPEF-Extractor. It also facilitates to add custom design exploration and optimization scripts.
    The detailed diagram of the OpenLANE architecture is shown below:
    
-<img src="/images/2.PNG">
+![](images/d1_2_openlane.PNG)
    
    OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively as shown here.
 
@@ -132,7 +129,7 @@
  ### PDK Directory Structure
    All the Process Design Kit(PDK) are listed under the `pdks/` directory. Along with the `Sky130A` we are using some other open-source PDKs and other related files are also available in the directory. The location of the PDK directory is given of `$PDK_ROOT` variable. 
     
-<img src="images/3.PNG">
+![](images/d1_3_ref.PNG)
  
  ### OpenLANE Initialization
    For invoking OpenLANE in Linux Ubuntu, we navigate to `/Desktop/work/tools/openlane_working_dir/openlane` and  first run the docker everytime we use OpenLANE. This is done by using the following script:
@@ -145,7 +142,7 @@
    - OpenLANE supports two modes of operation: interactive and autonomous.
    - To use interactive mode use `-interactive` flag with `./flow.tcl`
    
-<img src="images/4.PNG"> 
+![](images/d1_4_ini.PNG)
    
  ### Design Preparation
    The first step after invoking OpenLANE is to import the openlane package of required version. This is done using following command. Here 0.9 is the required version of OpenLANE.
@@ -155,8 +152,7 @@
    The next step is to prepare our design for the OpenLANE flow. This is done using following command:
        
     prep -design <design-name>
-   
-    
+      
    During the design preparation the technology LEF and cell LEF files are merged together to obtain a `merged.lef` file. The LEF file contains information like the layer information, set of design rules, information about each standard cell which is required for place and route. 
     
  ### Design Synthesis and Results
@@ -164,7 +160,6 @@
    
     run_synthesis
    
-<img src="images/openlane_synthesis.JPG">
    
 # Day 2 - Good floorplan vs bad floorplan and introduction to library cells
  ## Chip Floorplanning
@@ -186,7 +181,7 @@
    
    Successful floorplanning gives a `def` file as output. This file contains the die area and placement of standard cells.
    
-   <img src="images/d2_floorplan_def.JPG">
+![](images/d2_2_floorplan_def.PNG)
  
  ### Review Floorplan Layout in Magic
    Magic Layout Tool is used for visualizing the layout after floorplan. In order to view floorplan in Magic, following three files are required:
@@ -194,9 +189,7 @@
     2. Merged LEF file (`merged.lef`)
     3. DEF File
     
-   <img src="images/d2_floorplan_invoke_magic_cmd.JPG">
-   <img src="images/d2_floorplan_magic.JPG">
-   <img src="images/d2_floorplan_magic_expand.JPG">
+![](images/d2_1_magic_def.PNG)
  
  ## Placement
  ### Placement and Optimization
@@ -245,16 +238,7 @@
   The inverter design is done using Magic Layout Tool. It takes the technology file as an input (`sky130A.tech` in this case). Magic tool provide a very easy to use interface to design various layers of the layout. It also has an in-built DRC check fetaure.
   The snippet below shows a layout for CMOS Inverter with and without design rule violations.
   
-  <table border="0">
-  <tr>
-    <td><img src="images/d3_magic_layout_with_error.JPG"> </td>
-    <td> <img src="images/d3_magic_with_error.JPG"> </td>
-  </tr>
-  <tr>
-    <td><img src="images/d3_magic_layout_without_error.JPG"> </td>
-    <td> <img src="images/d3_magic_without_error.JPG"> </td>
-  </tr>
-  </table>
+![](images/d3_3_std_cell.PNG)
   
  ## Extract SPICE Netlist from Standard Cell Layout
   To simulate and verify the functionality of the standard cell layout designed, there is a need of SPICE netlist of a given layout. To mention in brief, "Simulation Program with Integrated Circuit Emphasis (SPICE)" is an industry standard design language for electronic circuitry. SPICE model very closely models the actual circuit behavior.
@@ -270,16 +254,7 @@
   
   The extracted SPICE model like the first snippet shown below. Some modification are done to the SPICE netlist for the purpose of simulations, which is shown in the second snippet below.
   
-  <table border="0">
-  <tr>
-    <td> <center>Commands for Extraction</center> <br /><img src="images/d3_spice_ext_1.JPG"> </td>
-    <td> <center>.ext file</center> <img src="images/d3_spice_ext_2.JPG"> </td>
-  </tr>
-  <tr>
-    <td> <center>Generated SPICE Netlist</center> <img src="images/d3_spice_1.JPG"> </td>
-    <td> <center>Modified SPICE Netlist</center> <img src="images/d3_spice_2.JPG"> </td>
-  </tr>
-  </table>
+![](images/d3_4.PNG)
   
  ## Transient Analysis using NGSPICE
   The SPICE netlist generated in previous step is simulated using the NGSPICE tool. NGSPICE is an open-source mixed-level/mixed-signal electronic spice circuit simulator.
@@ -291,11 +266,11 @@
     
     ngspice 1 -> plot Y vs time A
     
-   <img src="images/d3_ngspice_2.JPG">
+![](images/d3_5.PNG)
    
    Below figure shows the waveform of Inverter output vs input w.r.t. time. Many timing parameters like rise time delay, fall time delay, propagation delay are calculated using this waveform.
    
-   <img src="images/d3_ngspice_3.JPG">
+![](images/d3_6.PNG)
   
 # Day 4 - Pre-layout timing analysis and importance of good clock tree
   In order to use a design of standard cell layout in OpenLANE RTL2GDS flow, it is converted to a standard cell LEF. LEF stands for Library Exchange Format. The entire design has to be analyzed for any timing violations after addition or change in the design.
@@ -307,41 +282,112 @@ For each technology, tracks information is provided by the foundary and they are
   
     <layer-name> <X-or-Y> <track-offset> <track-pitch>
     
-  <img src="images/d4_track_info.JPG">
+  ![](images/d4_1.PNG)
   
   To create a standard cell LEF from an existing layout, some important aspects need to be taken into consideration.
   1. The height of cell be appropriate, so that the `VPWR` and `VGND` properly fall on the power distribution network.
   2. The width of cell should be an odd multiple of the minimum permissible grid size.
   3. The input and ouptut of the cell fall on intersection of the vertical and horizontal grid line.
   
-  <img src="images/d4_valid_layout.JPG">  
+  ![](images/d4_2.PNG)
   
+  ### Importing Custom LEF into synthesis flow
+  In order to use this cell in our OpenLANE flow, we need to add the related libs and LEF in our flow and we need to update the onfiguration file for our design so that our custom LEF and libs are read in the OpenLANE flow.
+  ![](images/d4_30.PNG)
+  
+    
+    ./flow.tcl -interactive
+    package require openlane 0.9
+    prep -design <design_name> -tag <runs_folder> -overwrite
+    set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+    add_lefs -src $lefs
+    run_synthesis
+    
+  We can notice the new custom inverter cells in the synthesis summary,
+  ![](images/d4_3.PNG)
+  
+  The `run_floorplan` command fails in the new version of OpenLANE, hence we use the following flow:
+ 
+    init_floorplan
+    place_io
+    gloabl_placement_or
+    detailed_placement
+    tap_decap_or
+    detailed_placement
+    gen_pdn
+ 
+ 
  ## Timing Analysis using OpenSTA
   The Static Timing Analysis(STA) of the design is carried out using the OpenSTA tool. The analysis can be done in to different ways.
   - Inside OpenLANE flow: This is by invoking `openroad` command inside the OpenLANE flow. In the openroad OpenSTA is invoked.
   - Outside OpenLANE flow: This is done by directly invoking OpenSTA in the command line. This requires extra configuration to be done to specific the verilog file, constraints, clcok period and other required parameters.
+  
+  For running STA using OpenSTA, we first need to create a SDC `my_base.sdc` with same values as used in our synthesis runs and create a configuration file `pre_sta.conf`. Now sta can be performed using sta `pre_sta.conf` .
+
+```   
+## my_base.sdc
+
+
+set ::env(CLOCK_PORT) clk
+set ::env(CLOCK_PERIOD) 24.73
+set ::env(SYNTH_DRIVING_CELL) sky130_fd_sc_hd__inv_8
+set ::env(SYNTH_DRIVING_CELL_PIN) Y
+set ::env(SYNTH_CAP_LOAD) 17.65
+create_clock [get_ports $::env(CLOCK_PORT)]  -name $::env(CLOCK_PORT)  -period $::env(CLOCK_PERIOD)
+set IO_PCT  0.2
+set input_delay_value [expr $::env(CLOCK_PERIOD) * $IO_PCT]
+set output_delay_value [expr $::env(CLOCK_PERIOD) * $IO_PCT]
+puts "\[INFO\]: Setting output delay to: $output_delay_value"
+puts "\[INFO\]: Setting input delay to: $input_delay_value"
+
+
+set clk_indx [lsearch [all_inputs] [get_port $::env(CLOCK_PORT)]]
+#set rst_indx [lsearch [all_inputs] [get_port resetn]]
+set all_inputs_wo_clk [lreplace [all_inputs] $clk_indx $clk_indx]
+#set all_inputs_wo_clk_rst [lreplace $all_inputs_wo_clk $rst_indx $rst_indx]
+set all_inputs_wo_clk_rst $all_inputs_wo_clk
+
+
+# correct resetn
+set_input_delay $input_delay_value  -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk_rst
+#set_input_delay 0.0 -clock [get_clocks $::env(CLOCK_PORT)] {resetn}
+set_output_delay $output_delay_value  -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
+
+# TODO set this as parameter
+set_driving_cell -lib_cell $::env(SYNTH_DRIVING_CELL) -pin $::env(SYNTH_DRIVING_CELL_PIN) [all_inputs]
+set cap_load [expr $::env(SYNTH_CAP_LOAD) / 1000.0]
+puts "\[INFO\]: Setting load to: $cap_load"
+set_load  $cap_load [all_outputs]
+```
+
+```
+## pre_sta.conf
+
+set_cmd_units -time ns -capacitance pF -current mA -voltage V -resistance kOhm -distance um
+read_liberty -min /home/paul.abhronil/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib
+read_liberty -max /home/paul.abhronil/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib
+read_verilog /home/paul.abhronil/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-01_13-56/results/synthesis/picorv32a.synthesis.v
+link_design picorv32a
+read_sdc /home/paul.abhronil/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/my_base.sdc
+report_checks -path_delay min_max -fields {slew trans net cap input_pin}
+report_tns
+report_wns
+
+```
+ 
+    sta <pre_sta.conf>
    
-  OpenSTA is invoked using the below mentioned command.
-  
-    sta <conf-file-if-required>
-  
+    
   The above command gives an Timing Analysis Report which contains:
-   1. Hold Time Slack
-   2. Setup Time Slack
-   3. Total Negative Slack (= 0.00, if no negative slack)
-   4. Worst Negative Slack (= 0.00, if no negative slack)
-  
-  <table border="0">
-  <tr>
-    <td> <img src="images/d4_sta_1.JPG"> </td>
-    <td> <img src="images/d4_sta_2.JPG"> </td>
-  </tr>
-  </table>
-  
+   1. Total Negative Slack = `-711.23`
+   2. Worst Negative Slack = `-23.89`
+    
   If the design produces any setup timing violaions in the analysis, it can be eliminated or reduced using techniques as follows:
   1. Increase the clock period (Not always possible as generally operating frequency is freezed in the specifications)
   2. Scaling the buffers (Causes increase in design area)
   3. Restricting the maximum fan-out of an element. 
+  
+  ![](images/d4_4.PNG)
   
  ## Clock Tree Synthesis using TritonCTS
   Clock Tree Synthesis(CTS) is a process which makes sure that the clock gets distributed evenly to all sequential elements in a design. The goal of CTS is to minimize the clock latency and skew.
@@ -352,12 +398,36 @@ For each technology, tracks information is provided by the foundary and they are
   
   In OpenLANE, clock tree synthesis is carried out using TritonCTS tool. CTS should always be done after the floorplanning and placement as the CTS is carried out on a `placement.def` file that is created during placement stage.
   
+  ```
+  ## placemnt.def
+## **CTS tree in TritonCTS is built considering single corner at a time (typical by default). Hence may see timing violations at slow/fast corners.**
+
+openroad
+read_lef /openLANE_flow/designs/picorv32a/runs/07-08_06-58/tmp/merged.lef
+read_def /openLANE_flow/designs/picorv32a/runs/07-08_06-58/results/cts/picorv32a.cts.def
+write_db picorv32a_cts.db
+read_db picorv32a_cts.db
+
+read_verilog /openLANE_flow/designs/picorv32a/runs/07-08_06-58/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+### read_liberty -min $::env(LIB_FASTEST)
+### read_liberty -max $::env(LIB_SLOWEST)
+
+link_design picorv32a
+
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+
+set_propagated_clock [all_clocks]
+
+report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format full_clock_expanded >> /openLANE_flow/designs/picorv32a/runs/07-08_06-58/reports/cts/cts_timing.openroad.typical.rpt
+```
+
+  
   The command used for running CTS in OpenLANE is given below.
   
     run_cts
     
-   <img src="images/d4_cts_1.JPG">
-   <img src="images/d4_cts_2.JPG">
+![](images/d4_5.JPG)
 
 # Day 5 - Final steps for RTL2GDS
  ## Generation of Power Distribution Network
@@ -366,7 +436,7 @@ For each technology, tracks information is provided by the foundary and they are
    
     gen_pdn
     
-   <img src="images/d5_pdn.JPG">
+![](images/d5_1.JPG)
    
  ## Routing using TritonRoute
    OpenLANE uses TritonRoute, an open source router for modern industrial designs. The router consists of several main building blocks, including pin access analysis, track assignment, initial detailed routing, search and repair, and a DRC engine.
@@ -379,12 +449,7 @@ For each technology, tracks information is provided by the foundary and they are
    
     run_routing
     
-   <table border="0">
-   <tr>
-    <td> <img src="images/d5_routing.JPG"> </td>
-    <td> <img src="images/d5_routing_2.JPG"> </td>
-   </tr>
-   </table>
+![](images/d5_2.JPG)
     
  ## SPEF File Generation
    Standard Parasitic Exchange Format (SPEF) is an IEEE standard for representing parasitic data of wires in a chip in ASCII format. Non-ideal wires have parasitic resistance and capacitance that are captured by SPEF. 
@@ -405,5 +470,3 @@ For each technology, tracks information is provided by the foundary and they are
 # Acknowledgement
   - [Kunal Ghosh](https://github.com/kunalg123), Co-founder, VSD Corp. Pvt. Ltd.
   - [Nickson Jose](https://github.com/nickson-jose)
-  - [Praharsha Mahurkar](https://github.com/praharshapm)
-  - Akurathi Radhika
