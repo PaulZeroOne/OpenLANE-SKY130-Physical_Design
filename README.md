@@ -286,6 +286,9 @@ git clone https://github.com/nickson-jose/vsdstdcelldesign.git
   
  ## Transient Analysis using NGSPICE
   The SPICE netlist generated in previous step is simulated using the NGSPICE tool. NGSPICE is an open-source mixed-level/mixed-signal electronic spice circuit simulator.
+  
+  ![](images/d3_5.PNG)
+  
   The command used to invoke NGSPICE is shown below.
   
     ngspice <name-of-SPICE-netlist-file>
@@ -294,7 +297,7 @@ git clone https://github.com/nickson-jose/vsdstdcelldesign.git
     
     ngspice 1 -> plot Y vs time A
     
-![](images/d3_5.PNG)
+
    
    Below figure shows the waveform of Inverter output vs input w.r.t. time. Many timing parameters like rise time delay, fall time delay, propagation delay are calculated using this waveform.
    
@@ -455,7 +458,7 @@ report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format
   
     run_cts
     
-![](images/d4_5.JPG)
+![](images/d4_5.jpg)
 
 # Day 5 - Final steps for RTL2GDS
  ## Generation of Power Distribution Network
@@ -464,7 +467,7 @@ report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format
    
     gen_pdn
     
-![](images/d5_1.JPG)
+![](images/d5_1.jpg)
    
  ## Routing using TritonRoute
    OpenLANE uses TritonRoute, an open source router for modern industrial designs. The router consists of several main building blocks, including pin access analysis, track assignment, initial detailed routing, search and repair, and a DRC engine.
@@ -477,7 +480,7 @@ report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format
    
     run_routing
     
-![](images/d5_2.JPG)
+![](images/d5_2.jpg)
     
  ## SPEF File Generation
    Standard Parasitic Exchange Format (SPEF) is an IEEE standard for representing parasitic data of wires in a chip in ASCII format. Non-ideal wires have parasitic resistance and capacitance that are captured by SPEF. 
