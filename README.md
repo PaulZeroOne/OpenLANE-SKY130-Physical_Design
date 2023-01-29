@@ -29,6 +29,7 @@
       - [Cell Design Flow](#cell-design-flow)
       - [Characterization Flow](#characterization-flow)
   - [Day 3 - Design library cell using Magic Layout and ngspice characterization](#day-3---design-library-cell-using-magic-layout-and-ngspice-characterization)
+    - [Importing Custom Inverter Design ](#importing-custom-inverter-design)
     - [CMOS Inverter Design using Magic](#cmos-inverter-design-using-magic)
     - [Extract SPICE Netlist from Standard Cell Layout](#extract-spice-netlist-from-standard-cell-layout)
     - [Transient Analysis using NGSPICE](#transient-analysis-using-ngspice)
@@ -203,12 +204,7 @@
    The DEF file created during floorplan is used as an input to placement. Placement in OpenLANE occurs in two stages:
    - Global Placement
    - Detailed Placement
-   
-   Placement is carried out as an iterative process till the value of overflow converges to 0.
-   
-   <img src="images/d2_placement_invoke_magic_cmd.JPG">
-   <img src="images/d2_placement_magic.JPG">
-   <table border="0"><tr><td><img src="images/d2_placement_magic_expand.JPG"> </td><td> <img src="images/d2_placement_magic_expand_2.JPG"> </td></tr></table>
+
    
  ## Cell Design and Characterization Flows
  ### Cell Design Flow
@@ -233,6 +229,38 @@
  
 # Day 3 - Design library cell using Magic Layout and ngspice characterization
   Every Design is represented by equivalent cell design. All the standard cell designs are available in the Cell Library. A fully custom cell design that meets all rules can be added to the library. To begin with, a CMOS Inverter is designed in Magic Layout Tool and analysis is carried out using NGSPICE tool.
+
+SPICE Deck - It is a connectivity information about a cell. It is a netlist. It has the inputs, tap points, etc.
+
+![](images/d3_1_spice_deck.PNG)  
+
+The SPICE Deck is written below:
+```
+*** MODEL Description ***
+*** NETLIST Description ***
+M1 out in vdd vdd pmos W=o.375 L=0.25 *** [component name] [connectivity] [drain] [gate] [source] [substrate] [type] [dimensions W/L] ***
+*** Similarly for NMOS ***
+M2 out in vdd vdd nmos W=o.375 L=0.25
+*** load cap connecivity and value [name] [node1] [node2] [value] ***
+cload out 0 10f
+*** Supply voltage [name] [node1] [node2] [value] ***
+Vdd vdd 0 2.5
+*** Input voltage [name] [node1] [node2] [value] ***
+Vin in 0 2.5
+*** Simulation Command ***
+.op
+.dc Vin 0 2.5 0.05 *** Sweeping gate input form 0 to 2.5 at steeps of 0.05  VTC curve***
+*** describe the model file ***
+.LIB "tsmc_025ummodel.mod" CMOS_MODELS
+.end
+```
+
+ ## Importing Custom Inverter Design
+The following repo is cloned into the directory
+```
+git clone https://github.com/nickson-jose/vsdstdcelldesign.git
+```
+![](images/d3_2_git_clone.PNG)
   
  ## CMOS Inverter Design using Magic
   The inverter design is done using Magic Layout Tool. It takes the technology file as an input (`sky130A.tech` in this case). Magic tool provide a very easy to use interface to design various layers of the layout. It also has an in-built DRC check fetaure.
@@ -458,14 +486,12 @@ report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format
     cd <path-to-SPEF_EXTRACTOR-tool-directory>
     python3 main.py <path-to-LEF-file> <path-to-DEF-file-created-after-routing>
     
-   The below snippet shows a small part of the `.spef` file.
-   
-   <img src="images/d5_spef_file.JPG">
    
 # References
   - RISC-V: https://riscv.org/
   - VLSI System Design: https://www.vlsisystemdesign.com/
   - OpenLANE: https://github.com/The-OpenROAD-Project/OpenLane
+  - Magic VLSI: http://opencircuitdesign.com/magic/index.html
 
 # Acknowledgement
   - [Kunal Ghosh](https://github.com/kunalg123), Co-founder, VSD Corp. Pvt. Ltd.
